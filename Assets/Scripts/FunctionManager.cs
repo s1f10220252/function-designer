@@ -17,6 +17,7 @@ public class FunctionManager : MonoBehaviour
 
     public void GenerateNewFunction()
     {
+        // Example: Randomly choose between a few functions
         int choice = UnityEngine.Random.Range(0, 5);
         switch (choice)
         {
@@ -46,6 +47,9 @@ public class FunctionManager : MonoBehaviour
                 break;
         }
         functionText.text = "Function: " + currentFunctionString;
+
+        // Debugging: Log the new function
+        Debug.Log("New Function Generated: " + currentFunctionString);
     }
 
     public float EvaluateFunction(float x)
@@ -56,7 +60,7 @@ public class FunctionManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("currentFunction is not assigned!");
+            Debug.LogError("currentFunction is not assigned.");
             return 0f;
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class DrawingManager : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
+        Debug.Log("DrawingManager: Initialized.");
     }
 
     void Update()
@@ -25,6 +27,8 @@ public class DrawingManager : MonoBehaviour
             isDrawing = true;
             points.Clear();
             lineRenderer.positionCount = 0;
+
+            Debug.Log("DrawingManager: Started drawing.");
         }
 
         if (Input.GetMouseButton(0) && isDrawing)
@@ -32,6 +36,8 @@ public class DrawingManager : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
             worldPos.z = 0;
+
+            // Clamp y values
             worldPos.y = Mathf.Clamp(worldPos.y, yMin, yMax);
 
             if (points.Count == 0 || Vector3.Distance(worldPos, points[points.Count - 1]) > 0.1f)
@@ -45,6 +51,7 @@ public class DrawingManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isDrawing = false;
+            Debug.Log("DrawingManager: Stopped drawing.");
         }
     }
 
@@ -52,8 +59,8 @@ public class DrawingManager : MonoBehaviour
     {
         Vector2 localPoint;
         Vector2 screenPoint = Input.mousePosition;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint);
-        return drawingArea.rect.Contains(localPoint);
+        bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint) && drawingArea.rect.Contains(localPoint);
+        return isOver;
     }
 
     public List<Vector3> GetDrawnPoints()
@@ -65,5 +72,6 @@ public class DrawingManager : MonoBehaviour
     {
         points.Clear();
         lineRenderer.positionCount = 0;
+        Debug.Log("DrawingManager: Drawing cleared.");
     }
 }

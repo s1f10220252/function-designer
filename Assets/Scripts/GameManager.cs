@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
         scoringManager.CalculateScore();
         nextButton.gameObject.SetActive(true);
         submitButton.gameObject.SetActive(false);
+
+        Debug.Log("OnSubmit called: Graph displayed and score calculated.");
     }
 
     void OnNext()
@@ -37,8 +39,11 @@ public class GameManager : MonoBehaviour
         drawingManager.ClearDrawing();
         graphPlotter.HideGraph();
         scoringManager.ResetScore();
-        functionManager.GenerateNewFunction();
+        functionManager.GenerateNewFunction(); // Ensure this is called
         submitButton.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(false);
+
+        // Debugging: Confirm OnNext was called
+        Debug.Log("OnNext called: New function generated.");
     }
 }
