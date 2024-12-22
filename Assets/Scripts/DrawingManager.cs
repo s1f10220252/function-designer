@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,8 @@ public class DrawingManager : MonoBehaviour
 
     public Camera mainCamera;
     public RectTransform drawingArea;
+    public float yMin = -10f;
+    public float yMax = 10f;
 
     void Start()
     {
@@ -31,8 +32,9 @@ public class DrawingManager : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
             worldPos.z = 0;
+            worldPos.y = Mathf.Clamp(worldPos.y, yMin, yMax);
 
-            if (points.Count == 0 || Vector3.Distance(worldPos, points[points.Count - 1]) > 0.01f)
+            if (points.Count == 0 || Vector3.Distance(worldPos, points[points.Count - 1]) > 0.1f)
             {
                 points.Add(worldPos);
                 lineRenderer.positionCount = points.Count;
@@ -49,7 +51,8 @@ public class DrawingManager : MonoBehaviour
     bool IsPointerOverDrawingArea()
     {
         Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, Input.mousePosition, mainCamera, out localPoint);
+        Vector2 screenPoint = Input.mousePosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint);
         return drawingArea.rect.Contains(localPoint);
     }
 

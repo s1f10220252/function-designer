@@ -10,6 +10,8 @@ public class GraphPlotter : MonoBehaviour
     public Camera mainCamera;
     public float xMin = -10f;
     public float xMax = 10f;
+    public float yMin = -10f;
+    public float yMax = 10f;
     public float step = 0.1f;
 
     void Start()
@@ -26,6 +28,7 @@ public class GraphPlotter : MonoBehaviour
         for (float x = xMin; x <= xMax; x += step)
         {
             float y = functionManager.EvaluateFunction(x);
+            y = Mathf.Clamp(y, yMin, yMax);
             Vector3 worldPos = new Vector3(x, y, 0);
             graphPoints.Add(worldPos);
         }
