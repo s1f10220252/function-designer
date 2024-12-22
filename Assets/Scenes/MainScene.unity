@@ -732,7 +732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   functionManager: {fileID: 293608420}
   drawingArea: {fileID: 1893155043}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 519420031}
   xMin: -10
   xMax: 10
   step: 0.1

@@ -17,8 +17,7 @@ public class FunctionManager : MonoBehaviour
 
     public void GenerateNewFunction()
     {
-        // Example: Randomly choose between a few functions
-        int choice = UnityEngine.Random.Range(0, 3);
+        int choice = UnityEngine.Random.Range(0, 5);
         switch (choice)
         {
             case 0:
@@ -33,14 +32,33 @@ public class FunctionManager : MonoBehaviour
                 currentFunction = (x) => x * x; // y = x^2
                 currentFunctionString = "y = x^2";
                 break;
-                // Add more functions as needed
+            case 3:
+                currentFunction = (x) => Mathf.Exp(x); // y = e^x
+                currentFunctionString = "y = e^x";
+                break;
+            case 4:
+                currentFunction = (x) => Mathf.Log(x + 10); // y = ln(x + 10)
+                currentFunctionString = "y = ln(x + 10)";
+                break;
+            default:
+                currentFunction = (x) => 0f; // Default to y = 0
+                currentFunctionString = "y = 0";
+                break;
         }
         functionText.text = "Function: " + currentFunctionString;
     }
 
     public float EvaluateFunction(float x)
     {
-        return currentFunction(x);
+        if (currentFunction != null)
+        {
+            return currentFunction(x);
+        }
+        else
+        {
+            Debug.LogError("currentFunction is not assigned!");
+            return 0f;
+        }
     }
 
     public string GetCurrentFunctionString()
