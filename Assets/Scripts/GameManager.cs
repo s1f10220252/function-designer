@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     void OnSubmit()
     {
-        drawingManager.GetComponent<LineRenderer>().enabled = false; // Prevent further drawing
+        // drawingManager.GetComponent<LineRenderer>().enabled = false; // Prevent further drawing
         graphPlotter.ShowGraph();
         scoringManager.CalculateScore();
         nextButton.gameObject.SetActive(true);
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         drawingManager.ClearDrawing();
         graphPlotter.HideGraph();
         scoringManager.ResetScore();
-        functionManager.GenerateNewFunction(); // Ensure this is called
+        functionManager.GenerateNewFunction();
         submitButton.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(false);
 

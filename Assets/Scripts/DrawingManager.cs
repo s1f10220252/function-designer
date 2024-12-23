@@ -22,7 +22,11 @@ public class DrawingManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea())
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
+        worldPos.z = 0;
+
+        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea() && worldPos.y > -3)
         {
             isDrawing = true;
             points.Clear();
@@ -33,10 +37,6 @@ public class DrawingManager : MonoBehaviour
 
         if (Input.GetMouseButton(0) && isDrawing)
         {
-            Vector3 mousePos = Input.mousePosition;
-            Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
-            worldPos.z = 0;
-
             // Clamp y values
             worldPos.y = Mathf.Clamp(worldPos.y, yMin, yMax);
 
@@ -60,6 +60,9 @@ public class DrawingManager : MonoBehaviour
         Vector2 localPoint;
         Vector2 screenPoint = Input.mousePosition;
         bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint) && drawingArea.rect.Contains(localPoint);
+
+        Debug.Log($"Mouse Position: {screenPoint}, Local Point: {localPoint}, IsOver: {isOver}");
+
         return isOver;
     }
 

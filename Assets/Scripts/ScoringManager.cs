@@ -36,6 +36,7 @@ public class ScoringManager : MonoBehaviour
             {
                 score += individualScore * (1 - (distance / distanceThreshold));
             }
+            Debug.LogFormat("x:{0} y:{1} dis:{2}",point.x,point.y,distance);
         }
 
         totalScore = Mathf.Clamp(score, 0, maxScore);
