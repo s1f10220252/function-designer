@@ -59,7 +59,9 @@ public class DrawingManager : MonoBehaviour
     {
         Vector2 localPoint;
         Vector2 screenPoint = Input.mousePosition;
-        bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint) && drawingArea.rect.Contains(localPoint);
+
+        // Use null for camera when in Screen Space - Overlay mode
+        bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, null, out localPoint) && drawingArea.rect.Contains(localPoint);
 
         Debug.Log($"Mouse Position: {screenPoint}, Local Point: {localPoint}, IsOver: {isOver}");
 
