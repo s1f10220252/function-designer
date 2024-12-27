@@ -46,7 +46,7 @@ public class FunctionManager : MonoBehaviour
                 currentFunctionString = "y = 0";
                 break;
         }
-        functionText.text = "Function: " + currentFunctionString;
+        functionText.text = currentFunctionString;
 
         // Debugging: Log the new function
         Debug.Log("New Function Generated: " + currentFunctionString);
