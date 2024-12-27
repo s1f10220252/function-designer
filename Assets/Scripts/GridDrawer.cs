@@ -192,8 +192,48 @@ public class GridDrawer : MonoBehaviour
             vTickLR.SetPosition(1, new Vector3(x, maxY - tickLength, 0));
         }
 
-        // **5. Ensure Specific World Coordinates Align Correctly:**
-        // For example, placing an object at (-10, 0) should align perfectly with the grid
-        // This is inherently handled by ensuring gridSquareSize is consistent and the camera is adjusted accordingly
+        // **5. Optional: Draw Origin Axis Differently**
+        // For better visibility, you can set the origin axes to a different color or width
+        DrawOriginAxes();
+    }
+
+    /// <summary>
+    /// Draws the X and Y axes with a distinct appearance.
+    /// </summary>
+    void DrawOriginAxes()
+    {
+        // **a. Horizontal Axis (Y=0)**
+        GameObject hAxis = new GameObject("H_Axis_0");
+        hAxis.transform.parent = this.transform;
+
+        LineRenderer lr = hAxis.AddComponent<LineRenderer>();
+        lr.material = gridLineMaterial;
+        lr.startColor = Color.red; // Different color for axes
+        lr.endColor = Color.red;
+        lr.startWidth = lineWidth * 2; // Thicker line for axes
+        lr.endWidth = lineWidth * 2;
+        lr.positionCount = 2;
+        lr.useWorldSpace = false;
+
+        lr.SetPosition(0, new Vector3(minX, 0, 0));
+        lr.SetPosition(1, new Vector3(maxX, 0, 0));
+        lr.sortingOrder = 2;
+
+        // **b. Vertical Axis (X=0)**
+        GameObject vAxis = new GameObject("V_Axis_0");
+        vAxis.transform.parent = this.transform;
+
+        LineRenderer vr = vAxis.AddComponent<LineRenderer>();
+        vr.material = gridLineMaterial;
+        vr.startColor = Color.red; // Different color for axes
+        vr.endColor = Color.red;
+        vr.startWidth = lineWidth * 2; // Thicker line for axes
+        vr.endWidth = lineWidth * 2;
+        vr.positionCount = 2;
+        vr.useWorldSpace = false;
+
+        vr.SetPosition(0, new Vector3(0, minY, 0));
+        vr.SetPosition(1, new Vector3(0, maxY, 0));
+        vr.sortingOrder = 2;
     }
 }
