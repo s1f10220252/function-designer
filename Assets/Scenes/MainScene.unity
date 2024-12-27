@@ -2469,7 +2469,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: y = sin(x)
+  m_text: Function Designer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 44bfa7d8ab11bf64ab3d937a577d0527, type: 2}
   m_sharedMaterial: {fileID: 6630081949161426277, guid: 44bfa7d8ab11bf64ab3d937a577d0527, type: 2}

@@ -17,7 +17,7 @@ public class FunctionManager : MonoBehaviour
 
     public void GenerateNewFunction()
     {
-        // Increased number of functions for more variety
+        // Simplified and increased variety of single-stroke functions
         int choice = UnityEngine.Random.Range(0, 10);
         switch (choice)
         {
@@ -30,39 +30,39 @@ public class FunctionManager : MonoBehaviour
                 currentFunctionString = "y = cos(x)";
                 break;
             case 2:
-                currentFunction = (x) => x * x; // y = x^2
+                currentFunction = (x) => x * x; // Parabola : y = x^2
                 currentFunctionString = "y = x^2";
                 break;
             case 3:
-                currentFunction = (x) => Mathf.Exp(x); // y = e^x
+                currentFunction = (x) => Mathf.Exp(x); // Exponential : y = e^x
                 currentFunctionString = "y = e^x";
                 break;
             case 4:
-                currentFunction = (x) => Mathf.Log(x + 10); // y = ln(x + 10)
+                currentFunction = (x) => Mathf.Log(x + 10); // Logarithmic : y = ln(x + 10)
                 currentFunctionString = "y = ln(x + 10)";
                 break;
             case 5:
-                currentFunction = (x) => 2 * x + 3; // Linear function: y = 2x + 3
+                currentFunction = (x) => 2 * x + 3; // Linear : y = 2x + 3
                 currentFunctionString = "y = 2x + 3";
                 break;
             case 6:
-                currentFunction = (x) => Mathf.Abs(x); // y = |x|
+                currentFunction = (x) => Mathf.Abs(x); // Absolute value : y = |x|
                 currentFunctionString = "y = |x|";
                 break;
             case 7:
-                currentFunction = (x) => 1 / (x + 1); // y = 1/(x + 1), avoiding division by zero
-                currentFunctionString = "y = 1/(x + 1)";
+                currentFunction = (x) => x * x * x; // Cubic : y = x^3
+                currentFunctionString = "y = x^3";
                 break;
             case 8:
-                currentFunction = (x) => Mathf.Sqrt(Mathf.Abs(x)); // y = sqrt(|x|)
-                currentFunctionString = "y = sqrt(|x|)";
+                currentFunction = (x) => Mathf.Sqrt(x + 10); // Square root (shifted) : y = sqrt(x + 10)
+                currentFunctionString = "y = sqrt(x + 10)";
                 break;
             case 9:
-                currentFunction = (x) => Mathf.Tan(x); // y = tan(x), note: handle appropriately in practice
-                currentFunctionString = "y = tan(x)";
+                currentFunction = (x) => -x; // Inverse linear : y = -x
+                currentFunctionString = "y = -x";
                 break;
             default:
-                currentFunction = (x) => 0f; // Default to y = 0
+                currentFunction = (x) => 0f; // Default : y = 0
                 currentFunctionString = "y = 0";
                 break;
         }
