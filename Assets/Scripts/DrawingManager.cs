@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DrawingManager : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class DrawingManager : MonoBehaviour
         Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
         worldPos.z = 0;
 
-        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea() && worldPos.y > -3)
+        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea())
         {
             isDrawing = true;
             points.Clear();
@@ -40,7 +41,12 @@ public class DrawingManager : MonoBehaviour
             // Clamp y values
             worldPos.y = Mathf.Clamp(worldPos.y, yMin, yMax);
 
-            if (points.Count == 0 || Vector3.Distance(worldPos, points[points.Count - 1]) > 0.1f)
+            // Optionally clamp x values based on DrawingArea
+            float xMin = -drawingArea.rect.width / 2f;
+            float xMax = drawingArea.rect.width / 2f;
+            worldPos.x = Mathf.Clamp(worldPos.x, xMin, xMax);
+
+            if (points.Count == 0 || Vector3.Distance(worldPos, points[points.Count - 1]) > 0.05f)
             {
                 points.Add(worldPos);
                 lineRenderer.positionCount = points.Count;
@@ -60,8 +66,9 @@ public class DrawingManager : MonoBehaviour
         Vector2 localPoint;
         Vector2 screenPoint = Input.mousePosition;
 
-        // Use null for camera when in Screen Space - Overlay mode
-        bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, null, out localPoint) && drawingArea.rect.Contains(localPoint);
+        // Use the main camera for ScreenPointToLocalPointInRectangle
+        bool isOver = RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, screenPoint, mainCamera, out localPoint)
+                       && drawingArea.rect.Contains(localPoint);
 
         Debug.Log($"Mouse Position: {screenPoint}, Local Point: {localPoint}, IsOver: {isOver}");
 

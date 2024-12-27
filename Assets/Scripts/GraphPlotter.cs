@@ -32,10 +32,17 @@ public class GraphPlotter : MonoBehaviour
 
         List<Vector3> graphPoints = new List<Vector3>();
 
+        // Adjust xMin and xMax based on DrawingArea
+        float drawingWidth = drawingArea.rect.width;
+        xMin = -drawingWidth / 2f;
+        xMax = drawingWidth / 2f;
+
         for (float x = xMin; x <= xMax; x += step)
         {
             float y = functionManager.EvaluateFunction(x);
-            Vector3 worldPos = new Vector3(x, y, 0);
+            // Clamp y within DrawingArea bounds
+            float yClamped = Mathf.Clamp(y, -drawingArea.rect.height / 2f, drawingArea.rect.height / 2f);
+            Vector3 worldPos = new Vector3(x, yClamped, 0);
             graphPoints.Add(worldPos);
         }
 

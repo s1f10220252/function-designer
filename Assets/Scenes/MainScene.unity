@@ -745,7 +745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   functionManager: {fileID: 293608420}
-  drawingArea: {fileID: 1893155043}
+  drawingArea: {fileID: 834454231}
   mainCamera: {fileID: 519420031}
   xMin: -10
   xMax: 10
@@ -900,7 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 519420031}
-  drawingArea: {fileID: 1893155043}
+  drawingArea: {fileID: 834454231}
   yMin: -10
   yMax: 10
 --- !u!120 &804126712
@@ -1061,7 +1061,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &834454232
 MonoBehaviour:
@@ -1473,7 +1473,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1356021188
 RectTransform:
   m_ObjectHideFlags: 0

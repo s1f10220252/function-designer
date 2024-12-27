@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
 public class GridDrawer : MonoBehaviour
 {
-    // **Public Variables:**
-
     [Header("Grid Settings")]
     [Tooltip("Number of grid squares horizontally.")]
     public int desiredHorizontalGridCount = 20; // For example, 20 squares horizontally
@@ -80,7 +77,7 @@ public class GridDrawer : MonoBehaviour
         // Calculate the screen ratio (width / height)
         screenRatio = (float)Screen.width / Screen.height;
 
-        // Set the orthographic size based on the desired horizontal grid count and aspect ratio
+        // Set the orthographic size based on the desired number of horizontal squares and aspect ratio
         // Orthographic Size defines the half-height of the camera's view
         // Total horizontal view = orthographicSize * 2 * aspectRatio
         // We set: totalHorizontalView = desiredHorizontalGridCount * gridSquareSize
@@ -101,15 +98,15 @@ public class GridDrawer : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        // **2. Calculate Grid Boundaries:**
-        // The DrawingArea is expected to have a size of (desiredHorizontalGridCount * gridSquareSize, desiredVerticalGridCount * gridSquareSize)
-        // Assuming a square aspect for DrawingArea. Adjust if different.
+        // **2. Calculate Grid Boundaries Based on DrawingArea Size:**
+        // Assume the RectTransform size is in units matching the gridSquareSize
         float width = rectTransform.rect.width;
         float height = rectTransform.rect.height;
 
-        minX = -width / 2f;
+        // Calculate min and max based on RectTransform size and grid square size
+        minX = -(width / 2f);
         maxX = width / 2f;
-        minY = -height / 2f;
+        minY = -(height / 2f);
         maxY = height / 2f;
 
         // **3. Draw Horizontal Lines:**
@@ -132,6 +129,7 @@ public class GridDrawer : MonoBehaviour
             // Set positions in local coordinates
             lr.SetPosition(0, new Vector3(minX, y, 0));
             lr.SetPosition(1, new Vector3(maxX, y, 0));
+            lr.sortingOrder = 0;
 
             // **Add Tick Marks to Horizontal Lines:**
             // Tick marks are added at the right end of each horizontal line
@@ -147,9 +145,10 @@ public class GridDrawer : MonoBehaviour
             hTickLR.positionCount = 2;
             hTickLR.useWorldSpace = false;
 
-            // Tick mark starts at (maxX, y) and extends left by tickLength
+            // Tick mark starts at (maxX, y, 0) and extends left by tickLength
             hTickLR.SetPosition(0, new Vector3(maxX, y, 0));
             hTickLR.SetPosition(1, new Vector3(maxX - tickLength, y, 0));
+            hTickLR.sortingOrder = 1;
         }
 
         // **4. Draw Vertical Lines:**
@@ -172,6 +171,7 @@ public class GridDrawer : MonoBehaviour
             // Set positions in local coordinates
             vr.SetPosition(0, new Vector3(x, minY, 0));
             vr.SetPosition(1, new Vector3(x, maxY, 0));
+            vr.sortingOrder = 0;
 
             // **Add Tick Marks to Vertical Lines:**
             // Tick marks are added at the top end of each vertical line
@@ -187,13 +187,54 @@ public class GridDrawer : MonoBehaviour
             vTickLR.positionCount = 2;
             vTickLR.useWorldSpace = false;
 
-            // Tick mark starts at (x, maxY) and extends down by tickLength
+            // Tick mark starts at (x, maxY, 0) and extends down by tickLength
             vTickLR.SetPosition(0, new Vector3(x, maxY, 0));
             vTickLR.SetPosition(1, new Vector3(x, maxY - tickLength, 0));
+            vTickLR.sortingOrder = 1;
         }
 
-        // **5. Ensure Specific World Coordinates Align Correctly:**
-        // For example, placing an object at (-10, 0) should align perfectly with the grid
-        // This is inherently handled by ensuring gridSquareSize is consistent and the camera is adjusted accordingly
+        // **5. Optional: Draw Origin Axis Differently**
+        // For better visibility, you can set the origin axes to a different color or width
+        DrawOriginAxes();
+    }
+
+    /// <summary>
+    /// Draws the X and Y axes with a distinct appearance.
+    /// </summary>
+    void DrawOriginAxes()
+    {
+        // **a. Horizontal Axis (Y=0)**
+        GameObject hAxis = new GameObject("H_Axis_0");
+        hAxis.transform.parent = this.transform;
+
+        LineRenderer lr = hAxis.AddComponent<LineRenderer>();
+        lr.material = gridLineMaterial;
+        lr.startColor = Color.red; // Different color for axes
+        lr.endColor = Color.red;
+        lr.startWidth = lineWidth * 2; // Thicker line for axes
+        lr.endWidth = lineWidth * 2;
+        lr.positionCount = 2;
+        lr.useWorldSpace = false;
+
+        lr.SetPosition(0, new Vector3(minX, 0, 0));
+        lr.SetPosition(1, new Vector3(maxX, 0, 0));
+        lr.sortingOrder = 2;
+
+        // **b. Vertical Axis (X=0)**
+        GameObject vAxis = new GameObject("V_Axis_0");
+        vAxis.transform.parent = this.transform;
+
+        LineRenderer vr = vAxis.AddComponent<LineRenderer>();
+        vr.material = gridLineMaterial;
+        vr.startColor = Color.red; // Different color for axes
+        vr.endColor = Color.red;
+        vr.startWidth = lineWidth * 2; // Thicker line for axes
+        vr.endWidth = lineWidth * 2;
+        vr.positionCount = 2;
+        vr.useWorldSpace = false;
+
+        vr.SetPosition(0, new Vector3(0, minY, 0));
+        vr.SetPosition(1, new Vector3(0, maxY, 0));
+        vr.sortingOrder = 2;
     }
 }
