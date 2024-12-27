@@ -11,7 +11,7 @@ public class ScoringManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
 
     public float maxScore = 100f;
-    public float distanceThreshold = 1f; // Maximum distance considered
+    public float distanceThreshold = 0.5f; // Reduced for more precision
 
     private float currentScore = 0f;
 
@@ -27,16 +27,28 @@ public class ScoringManager : MonoBehaviour
 
         float individualScore = maxScore / drawnPoints.Count;
         float score = 0f;
+        int pointsWithinThreshold = 0;
 
-        foreach (Vector3 point in drawnPoints)
+        for (int i = 0; i < drawnPoints.Count; i++)
         {
+            Vector3 point = drawnPoints[i];
             float yExpected = functionManager.EvaluateFunction(point.x);
             float distance = Mathf.Abs(point.y - yExpected);
+
+            // Reward only points very close to the expected value
             if (distance <= distanceThreshold)
             {
                 score += individualScore * (1 - (distance / distanceThreshold));
+                pointsWithinThreshold++;
             }
+
             Debug.LogFormat("x:{0} y:{1} dis:{2}", point.x, point.y, distance);
+        }
+
+        // Further reduce score if not enough points are within threshold
+        if (pointsWithinThreshold < drawnPoints.Count * 0.8)
+        {
+            score *= 0.8f; // 20% penalty if fewer than 80% of points are precise
         }
 
         currentScore = Mathf.Clamp(score, 0, maxScore);
