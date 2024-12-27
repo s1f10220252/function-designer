@@ -13,14 +13,14 @@ public class ScoringManager : MonoBehaviour
     public float maxScore = 100f;
     public float distanceThreshold = 1f; // Maximum distance considered
 
-    private float totalScore = 0f;
+    private float currentScore = 0f;
 
     public void CalculateScore()
     {
         List<Vector3> drawnPoints = drawingManager.GetDrawnPoints();
         if (drawnPoints.Count == 0)
         {
-            totalScore = 0f;
+            currentScore = 0f;
             UpdateScoreText();
             return;
         }
@@ -36,21 +36,26 @@ public class ScoringManager : MonoBehaviour
             {
                 score += individualScore * (1 - (distance / distanceThreshold));
             }
-            Debug.LogFormat("x:{0} y:{1} dis:{2}",point.x,point.y,distance);
+            Debug.LogFormat("x:{0} y:{1} dis:{2}", point.x, point.y, distance);
         }
 
-        totalScore = Mathf.Clamp(score, 0, maxScore);
+        currentScore = Mathf.Clamp(score, 0, maxScore);
         UpdateScoreText();
     }
 
     void UpdateScoreText()
     {
-        scoreText.text = "Score: " + Mathf.RoundToInt(totalScore).ToString();
+        scoreText.text = "Score: " + Mathf.RoundToInt(currentScore).ToString();
     }
 
     public void ResetScore()
     {
-        totalScore = 0f;
+        currentScore = 0f;
         UpdateScoreText();
+    }
+
+    public float GetCurrentScore()
+    {
+        return currentScore;
     }
 }
