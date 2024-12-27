@@ -26,7 +26,7 @@ public class DrawingManager : MonoBehaviour
         Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
         worldPos.z = 0;
 
-        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea() && worldPos.y > -3)
+        if (Input.GetMouseButtonDown(0) && IsPointerOverDrawingArea() && worldPos.y > -4.3)
         {
             isDrawing = true;
             points.Clear();
