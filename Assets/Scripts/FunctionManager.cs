@@ -10,6 +10,16 @@ public class FunctionManager : MonoBehaviour
     private Func<float, float> currentFunction;
     private string currentFunctionString;
 
+    private int GetNonZero(int min, int max)
+    {
+        int val = 0;
+        while (val == 0)
+        {
+            val = UnityEngine.Random.Range(min, max);
+        }
+        return val;
+    }
+
     void Start()
     {
         GenerateNewFunction();
@@ -17,58 +27,127 @@ public class FunctionManager : MonoBehaviour
 
     public void GenerateNewFunction()
     {
-        // Simplified and increased variety of single-stroke functions
-        int choice = UnityEngine.Random.Range(0, 10);
+        // We'll have eight equally likely cases (0 to 7):
+        int choice = UnityEngine.Random.Range(0, 8);
+
         switch (choice)
         {
             case 0:
-                currentFunction = Mathf.Sin;
-                currentFunctionString = "y = sin(x)";
-                break;
+                {
+                    // Linear function: y = a·x + b
+                    int a = GetNonZero(-3, 4); // [-3, 3] but not 0
+                    int b = UnityEngine.Random.Range(-5, 6); // [-5, 5]
+                    currentFunction = (x) => a * x + b;
+                    // Build display string:
+                    string aStr = (a == 1) ? "" : (a == -1 ? "-" : a.ToString());
+                    currentFunctionString = "y = " + aStr + "x";
+                    if (b > 0)
+                        currentFunctionString += " + " + b;
+                    else if (b < 0)
+                        currentFunctionString += " - " + Math.Abs(b);
+                    break;
+                }
             case 1:
-                currentFunction = Mathf.Cos;
-                currentFunctionString = "y = cos(x)";
-                break;
+                {
+                    // Quadratic function: y = a·x² + b·x + c
+                    int a = GetNonZero(-2, 3); // small range to keep scaling moderate
+                    int b = UnityEngine.Random.Range(-3, 4);
+                    int c = UnityEngine.Random.Range(-5, 6);
+                    currentFunction = (x) => a * x * x + b * x + c;
+                    // Build display string:
+                    string aStr = (Math.Abs(a) == 1) ? (a < 0 ? "-" : "") : a.ToString();
+                    currentFunctionString = "y = " + aStr + "x^2";
+                    if (b != 0)
+                        currentFunctionString += (b > 0 ? " + " : " - ") + (Math.Abs(b) == 1 ? "x" : Math.Abs(b) + "x");
+                    if (c != 0)
+                        currentFunctionString += (c > 0 ? " + " : " - ") + Math.Abs(c);
+                    break;
+                }
             case 2:
-                currentFunction = (x) => x * x; // Parabola : y = x^2
-                currentFunctionString = "y = x^2";
-                break;
-            case 3:
-                currentFunction = (x) => Mathf.Exp(x); // Exponential : y = e^x
-                currentFunctionString = "y = e^x";
-                break;
-            case 4:
-                currentFunction = (x) => Mathf.Log(x + 10); // Logarithmic : y = ln(x + 10)
-                currentFunctionString = "y = ln(x + 10)";
-                break;
-            case 5:
-                currentFunction = (x) => 2 * x + 3; // Linear : y = 2x + 3
-                currentFunctionString = "y = 2x + 3";
-                break;
-            case 6:
-                currentFunction = (x) => Mathf.Abs(x); // Absolute value : y = |x|
-                currentFunctionString = "y = |x|";
-                break;
-            case 7:
-                currentFunction = (x) => x * x * x; // Cubic : y = x^3
-                currentFunctionString = "y = x^3";
-                break;
-            case 8:
-                currentFunction = (x) => Mathf.Sqrt(x + 10); // Square root (shifted) : y = sqrt(x + 10)
-                currentFunctionString = "y = sqrt(x + 10)";
-                break;
-            case 9:
-                currentFunction = (x) => -x; // Inverse linear : y = -x
-                currentFunctionString = "y = -x";
-                break;
-            default:
-                currentFunction = (x) => 0f; // Default : y = 0
-                currentFunctionString = "y = 0";
-                break;
-        }
-        functionText.text = currentFunctionString;
+                {
+                    // Radical function: choose randomly between a half–power and a cube–root variant.
+                    int radOption = UnityEngine.Random.Range(0, 2);
+                    int A = GetNonZero(-2, 3); // coefficient A
+                    int B = UnityEngine.Random.Range(-3, 4); // intercept B
 
-        // Debugging: Log the new function
+                    if (radOption == 0)
+                    {
+                        // Half–power: y = A·(sign(x)·sqrt(|x|)) + B.
+                        currentFunction = (x) => A * (x < 0 ? -Mathf.Sqrt(-x) : Mathf.Sqrt(x)) + B;
+                        currentFunctionString = "y = " + ((A == 1) ? "" : (A == -1 ? "-" : A.ToString()))
+                                                  + "x^(1/2)";
+                    }
+                    else
+                    {
+                        // Cube–root: y = A·(if x >= 0 then x^(1/3) else -(|x|)^(1/3)) + B.
+                        currentFunction = (x) => A * (x >= 0 ? Mathf.Pow(x, 1f / 3f) : -Mathf.Pow(-x, 1f / 3f)) + B;
+                        currentFunctionString = "y = " + ((A == 1) ? "" : (A == -1 ? "-" : A.ToString()))
+                                                  + "x^(1/3)";
+                    }
+                    // Append intercept if needed:
+                    if (B > 0)
+                        currentFunctionString += " + " + B;
+                    else if (B < 0)
+                        currentFunctionString += " - " + Math.Abs(B);
+                    break;
+                }
+            case 3:
+                {
+                    // Cubic monomial: y = A·x^3
+                    int A = GetNonZero(-2, 3);
+                    currentFunction = (x) => A * x * x * x;
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    currentFunctionString = "y = " + AStr + "x^3";
+                    break;
+                }
+            case 4:
+                {
+                    // Exponential function: y = A·exp(B·x)
+                    int A = GetNonZero(-2, 3);
+                    int B = GetNonZero(-2, 3);
+                    currentFunction = (x) => A * Mathf.Exp(B * x);
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    string signB = (B >= 0) ? "" : "-";
+                    currentFunctionString = "y = " + AStr + "e^(" + signB + Math.Abs(B) + "x)";
+                    break;
+                }
+            case 5:
+                {
+                    // Sine function: y = A·sin(x)
+                    int A = GetNonZero(-3, 4);
+                    currentFunction = (x) => A * Mathf.Sin(x);
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    currentFunctionString = "y = " + AStr + "sin(x)";
+                    break;
+                }
+            case 6:
+                {
+                    // Cosine function: y = A·cos(x)
+                    int A = GetNonZero(-3, 4);
+                    currentFunction = (x) => A * Mathf.Cos(x);
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    currentFunctionString = "y = " + AStr + "cos(x)";
+                    break;
+                }
+            case 7:
+                {
+                    // Logarithmic function (modified to be continuous):
+                    // Define y = A · ln(|x| + 1). This is continuous over all x.
+                    int A = GetNonZero(-2, 3);
+                    currentFunction = (x) => A * Mathf.Log(Mathf.Abs(x) + 1);
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    currentFunctionString = "y = " + AStr + "ln(|x| + 1)";
+                    break;
+                }
+            default:
+                {
+                    currentFunction = (x) => 0;
+                    currentFunctionString = "y = 0";
+                    break;
+                }
+        }
+
+        functionText.text = currentFunctionString;
         Debug.Log("New Function Generated: " + currentFunctionString);
     }
 
