@@ -27,7 +27,7 @@ public class FunctionManager : MonoBehaviour
 
     public void GenerateNewFunction()
     {
-        // We'll have eight equally likely cases (0 to 7):
+        // We have eight equally likely cases (0 to 7):
         int choice = UnityEngine.Random.Range(0, 8);
 
         switch (choice)
@@ -35,10 +35,9 @@ public class FunctionManager : MonoBehaviour
             case 0:
                 {
                     // Linear function: y = a·x + b
-                    int a = GetNonZero(-3, 4); // [-3, 3] but not 0
-                    int b = UnityEngine.Random.Range(-5, 6); // [-5, 5]
+                    int a = GetNonZero(-3, 4); // Random nonzero between -3 and 3.
+                    int b = UnityEngine.Random.Range(-5, 6); // between -5 and 5.
                     currentFunction = (x) => a * x + b;
-                    // Build display string:
                     string aStr = (a == 1) ? "" : (a == -1 ? "-" : a.ToString());
                     currentFunctionString = "y = " + aStr + "x";
                     if (b > 0)
@@ -50,11 +49,10 @@ public class FunctionManager : MonoBehaviour
             case 1:
                 {
                     // Quadratic function: y = a·x² + b·x + c
-                    int a = GetNonZero(-2, 3); // small range to keep scaling moderate
+                    int a = GetNonZero(-2, 3); // small range for scaling control.
                     int b = UnityEngine.Random.Range(-3, 4);
                     int c = UnityEngine.Random.Range(-5, 6);
                     currentFunction = (x) => a * x * x + b * x + c;
-                    // Build display string:
                     string aStr = (Math.Abs(a) == 1) ? (a < 0 ? "-" : "") : a.ToString();
                     currentFunctionString = "y = " + aStr + "x^2";
                     if (b != 0)
@@ -65,26 +63,12 @@ public class FunctionManager : MonoBehaviour
                 }
             case 2:
                 {
-                    // Radical function: choose randomly between a half–power and a cube–root variant.
-                    int radOption = UnityEngine.Random.Range(0, 2);
-                    int A = GetNonZero(-2, 3); // coefficient A
-                    int B = UnityEngine.Random.Range(-3, 4); // intercept B
-
-                    if (radOption == 0)
-                    {
-                        // Half–power: y = A·(sign(x)·sqrt(|x|)) + B.
-                        currentFunction = (x) => A * (x < 0 ? -Mathf.Sqrt(-x) : Mathf.Sqrt(x)) + B;
-                        currentFunctionString = "y = " + ((A == 1) ? "" : (A == -1 ? "-" : A.ToString()))
-                                                  + "x^(1/2)";
-                    }
-                    else
-                    {
-                        // Cube–root: y = A·(if x >= 0 then x^(1/3) else -(|x|)^(1/3)) + B.
-                        currentFunction = (x) => A * (x >= 0 ? Mathf.Pow(x, 1f / 3f) : -Mathf.Pow(-x, 1f / 3f)) + B;
-                        currentFunctionString = "y = " + ((A == 1) ? "" : (A == -1 ? "-" : A.ToString()))
-                                                  + "x^(1/3)";
-                    }
-                    // Append intercept if needed:
+                    // Absolute value function: y = A·|x| + B
+                    int A = GetNonZero(-3, 4); // Avoid 0.
+                    int B = UnityEngine.Random.Range(-5, 6);
+                    currentFunction = (x) => A * Mathf.Abs(x) + B;
+                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
+                    currentFunctionString = "y = " + AStr + "|x|";
                     if (B > 0)
                         currentFunctionString += " + " + B;
                     else if (B < 0)
@@ -131,12 +115,10 @@ public class FunctionManager : MonoBehaviour
                 }
             case 7:
                 {
-                    // Logarithmic function (modified to be continuous):
-                    // Define y = A · ln(|x| + 1). This is continuous over all x.
-                    int A = GetNonZero(-2, 3);
-                    currentFunction = (x) => A * Mathf.Log(Mathf.Abs(x) + 1);
-                    string AStr = (A == 1) ? "" : (A == -1 ? "-" : A.ToString());
-                    currentFunctionString = "y = " + AStr + "ln(|x| + 1)";
+                    // Constant function: y = C
+                    int C = UnityEngine.Random.Range(-5, 6);
+                    currentFunction = (x) => C;
+                    currentFunctionString = "y = " + C;
                     break;
                 }
             default:
