@@ -156,6 +156,7 @@ MonoBehaviour:
   functionManager: {fileID: 293608420}
   scoreText: {fileID: 404072800}
   maxScore: 100
+  maxDistance: 5
   distanceThreshold: 1
 --- !u!4 &211791680
 Transform:
@@ -1639,7 +1640,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 0.9568628, b: 0.015686275, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 0.9568628, b: 0.015686275, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
